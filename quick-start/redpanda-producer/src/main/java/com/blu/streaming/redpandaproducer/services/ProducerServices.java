@@ -9,7 +9,14 @@ import org.springframework.stereotype.Service;
 public class ProducerServices {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
-    public void sendMessage(){
-        kafkaTemplate.send("demo-topic","test message");
+    public void sendMessage() throws InterruptedException{
+        int cnt = 0;
+        while (true){
+            kafkaTemplate.send("demo-topic", "partition:"+cnt,"test message");
+            Thread.sleep(2000);
+            System.out.println("Message sent: " + cnt);
+            cnt ++;
+        }
+        //kafkaTemplate.send("demo-topic","test message");
     }
 }
